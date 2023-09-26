@@ -1,10 +1,11 @@
 import express from 'express'
+import 'dotenv/config'
 import multer from 'multer'
 import cors from 'cors'
 import mongoose from 'mongoose'
 import { loginValidation, postCreateValidation, registerValidation } from './validations/validations.js'
 import checkAuth from './utils/checkAuth.js'
-import { auth, login, register } from './controllers/userController.js'
+import { auth, login, register } from './controllers/UserController.js'
 import {create, getAll, getOne, getTags, remove, update} from './controllers/PostController.js'
 import { handleErrors } from './utils/handleErrors.js'
 
@@ -26,7 +27,7 @@ app.use('/uploads', express.static('uploads'))
 
 mongoose
 	.connect(
-		'mongodb+srv://noxplit:killmeme123@cluster0.6pky9go.mongodb.net/blog?retryWrites=true&w=majority',
+		process.env.MONGODB_CONNECT
 	)
 	.then(() => {
 		console.log('Connect to MongoDB')
@@ -52,7 +53,7 @@ app.patch('/posts/:id', checkAuth, postCreateValidation, update) // Обновл
 
 
 
-app.listen(4444, err => {
+app.listen(process.env.PORT || 4444, err => {
 	if (err) {
 		return console.log(err)
 	}
